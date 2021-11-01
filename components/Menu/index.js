@@ -15,7 +15,7 @@ export default function Menu({list,base}) {
                 <Column size='full' textAlign='centered'>
                     <div className='level-item'>
                         <Image.Container className='level fit'>
-                            <Image alt={'minha imagem de perfil'} rounded={true} src={base.cover.file.url}/>   
+                            <Image alt={'minha imagem de perfil'} rounded={true} src={base && base.cover.file.url}/>   
                         </Image.Container>
                     </div>
                     <div>
@@ -24,7 +24,7 @@ export default function Menu({list,base}) {
                     </div> 
                 </Column>
                 {
-                    list.map((resp,index)=>{return(
+                    list && list.map((resp,index)=>{return(
                         <Link key={index}  href={'/'+resp.properties.Name.title[0].text.content+'/'+resp.id}>
                             <Column as='a' size='3'  className='menuItem' onClick={()=>{changetoggle(!toggle)}}>
                                 <p>{resp.properties.Name.title[0].text.content}</p>

@@ -9,7 +9,7 @@ export default function MyModal({children,title}) {
     return ( 
         
         <div hidden={toggle} className={ !toggle ? 'is-flex modalRoot' : undefined} >
-            <Modal.Background onClick={()=>{}}/>
+            <Modal.Background onClick={()=>{changetoggle(!toggle)}}/>
             <Modal.Card>
                 <Modal.Card.Head>
                 <Modal.Card.Title>{title}</Modal.Card.Title>
