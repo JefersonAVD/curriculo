@@ -113,6 +113,6 @@ export async function getStaticProps(context){
           list:dataPost,
           
       },
-      revalidate: 10
+      revalidate: 2
   }
 }
