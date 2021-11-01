@@ -10,19 +10,19 @@ export default function Page({title,cont}){
           cont.map((resp,index)=>{
             switch(resp.type){
               case 'paragraph':
-                return(<a key={resp.id} target='_blank' href={resp[resp.type].text[0].href}> {resp[resp.type].text?.map(x=>{ return( x.href ? <p>{x?.plain_text}</p>:<p key={resp.id}>{x?.plain_text}</p>)})}</a>) 
+                <a key={resp.id} target='_blank' href={resp[resp.type].text[0].href}> {resp[resp.type].text?.map(x=>{ return( x.href ? <p>{x?.plain_text}</p>:<p key={resp.id}>{x?.plain_text}</p>)})}</a>
                 break;
               case "bulleted_list_item" :
-                return(<ul key={resp.id}><li>{resp[resp.type].text[index]?.plain_text}</li></ul>)
+                <ul key={resp.id}><li>{resp[resp.type].text[index]?.plain_text}</li></ul>
                 break;
               case "image" :
-                return(<Image alt={'img '+resp.id} key={resp.id} src={resp[resp.type].external.url}/>)
+                <Image alt={'img '+resp.id} key={resp.id} src={resp[resp.type].external.url}/>
                 break;
               case "bookmark":
-                return(<iframe key={resp.id} src={`${resp.bookmark.url}`} width='100%' height='100%'></iframe>)
+                <iframe key={resp.id} src={`${resp.bookmark.url}`} width='100%' height='100%'></iframe>
                 break;
               default :
-                return(<div></div>)
+                <div></div>
                 break;
             }
           })
