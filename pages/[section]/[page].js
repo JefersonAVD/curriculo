@@ -1,5 +1,6 @@
 import MyModal from "../../components/Modal"
 import axios from "axios"
+import Image from 'next/image'
 
 export default function Page({title,cont}){
   return(
@@ -11,7 +12,7 @@ export default function Page({title,cont}){
           }else if (resp.type=="bulleted_list_item"){
             return(<ul key={resp.id}><li>{resp[resp.type].text[0]?.plain_text}</li></ul>)
           }else if (resp.type=="image"){
-            return(<img key={resp.id} src={resp[resp.type].external.url}/>)
+            return(<Image alt={'img '+resp.id} key={resp.id} src={resp[resp.type].external.url}/>)
           }else if(resp.type=="bookmark"){
             return (<iframe key={resp.id} src={`${resp.bookmark.url}`} width='100%' height='100%'></iframe>)
           }

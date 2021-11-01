@@ -15,7 +15,7 @@ export default function Menu({list,base}) {
                 <Column size='full' textAlign='centered'>
                     <div className='level-item'>
                         <Image.Container className='level fit'>
-                            <Image rounded={true} src={base.cover.file.url}/>   
+                            <Image alt={'minha imagem de perfil'} rounded={true} src={base.cover.file.url}/>   
                         </Image.Container>
                     </div>
                     <div>
