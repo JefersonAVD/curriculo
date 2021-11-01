@@ -1,6 +1,7 @@
 import axios from "axios"
   
 export default function Home({list,base}) {
+  console.log(list)
     return (
         <>  
         </>
