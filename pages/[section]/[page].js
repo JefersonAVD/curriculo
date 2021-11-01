@@ -10,7 +10,7 @@ export default function Page({title,cont}){
           cont.map((resp,index)=>{
             switch(resp.type){
               case 'paragraph':
-                return(resp[resp.type].text.map(x=>{ return( x.href ? <a key={resp.id} href={x[0]?.href}><p>{x?.plain_text}</p></a>:<p key={resp.id}>{x?.plain_text}</p>)})) 
+                return(<a key={resp.id} target='_blank' href={resp[resp.type].text[0].href}> {resp[resp.type].text?.map(x=>{ return( x.href ? <p>{x?.plain_text}</p>:<p key={resp.id}>{x?.plain_text}</p>)})}</a>) 
                 break;
               case "bulleted_list_item" :
                 return(<ul key={resp.id}><li>{resp[resp.type].text[index]?.plain_text}</li></ul>)
