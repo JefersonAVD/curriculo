@@ -14,3 +14,55 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.menuItem{
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 10px 5%;
+  height: 17.5vh;
+  position: relative;
+}
+
+.menuItem p{
+  position:absolute;
+  bottom: 6%;
+}
+.menuItem .icon{
+  position:absolute;
+  right: 6%;
+  top:12%
+}
+
+@media (max-width: 411px) {
+  .menuItem{
+    height: 60px;
+  }
+  .menuItem .icon{
+    position:absolute;
+    right: 6%;
+    top:30%
+  }
+  
+}
+
+.modalRoot{
+  position:'absolute'; 
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  z-index: 40;
+}
+
+.fit{
+  overflow: hidden;
+  height: 160px;
+  width: 120px;
+}
+.fit img{
+  object-position: top !important;
+}
