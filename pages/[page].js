@@ -5,13 +5,56 @@ import { useRouter } from 'next/router'
 import { useEffect } from "react"
 
 export default function Page({cont,title}){
-
   const router = useRouter();
-  
 
-  function populate(content){
+  function populate(resp){
+    let valueContent
+    if(resp.child){ 
+      console.log(resp) 
+      switch(resp.type){
+        case 'paragraph':
+          valueContent = resp[resp.type].text[0]?.href ? 
+          <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}> 
+            {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
+            
+          </a> : 
+          <div> {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
+            <div className='child'>{resp.child.map(x=>{return <p key={resp.id+1} >{x[x.type].text[0].plain_text}</p>})}</div></div> 
+          break;
+        case "bulleted_list_item" :
+          valueContent = <ul key={resp.id}>{resp[resp.type].text?.map(x=>{return <li key={resp.id+1} >{x?.plain_text}</li>})}</ul>
+        case "image" :
+          valueContent = <Image key={resp.id}  alt={'img '+resp.id} src={resp[resp.type].external.url}/>
+        default :
+          valueContent = ''
+      }
+    }else{
+      let valueContent;
+      switch(resp.type){
+        case 'paragraph':
+          valueContent = resp[resp.type].text[0]?.href ? 
+          <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}> 
+            {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
+            
+          </a> : 
+          resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})
+          break;
+        case "bulleted_list_item" :
+          valueContent = <ul key={resp.id}>{resp[resp.type].text?.map(x=>{return <li key={resp.id} >{x?.plain_text}</li>})}</ul>
+        case "image" :
+          valueContent = <Image key={resp.id}  alt={'img '+resp.id} src={resp[resp.type].external?.url}/>
+        default :
+          valueContent = ''
+    }
     
+    return(
+    <div key={resp.id} className='content'>
+      {valueContent}
+    </div>)
+    }  
   }
+
+
   if (router.isFallback) {
     return <MyModal title={'Loading...'}>Loading...</MyModal>
   }
@@ -22,25 +65,7 @@ export default function Page({cont,title}){
   return(
       <MyModal title={title}>
         {router.isFallback?<MyModal title={'Loading...'}>Loading...</MyModal> :
-          cont.map((resp,index)=>{
-            switch(resp.type){
-              case 'paragraph':
-                return <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}> {resp[resp.type].text?.map(x=>{ return( x.href ? <p>{x?.plain_text}</p>:<p key={resp.id}>{x?.plain_text}</p>)})}</a>
-                break;
-              case "bulleted_list_item" :
-                return<ul key={resp.id}><li>{resp[resp.type].text[0]?.plain_text}</li></ul>
-                break;
-              case "image" :
-                return<Image alt={'img '+resp.id} key={resp.id} src={resp[resp.type].external.url}/>
-                break;
-              case "bookmark":
-                return<iframe key={resp.id} src={`${resp.bookmark.url}`} width='100%' height='100%'></iframe>
-                break;
-              default :
-              return<div></div>
-                break;
-            }
-          })
+          cont.map(populate)
         }
       </MyModal>  
   )
@@ -101,21 +126,13 @@ export async function getStaticProps(context){
       method:'get'
   }
 
-  let respGet = null
-  let dataGet = null
-  try{
-    respGet = await axios('https://api.notion.com/v1/blocks/'+id+'/children', paramsGet)
-    dataGet = await respGet.data.results
-  }
-  catch(err) {}; 
-  if (!dataGet) {
-    return {
-      notFound: true,
-    }
-  }
+  let respGet = await axios('https://api.notion.com/v1/blocks/'+id+'/children', paramsGet)
+  let dataGet = await respGet.data.results
 
-  function getChild(data){
-    data.forEach(async (x,index)=>{
+ 
+
+  async function getChild(data){
+    data.forEach(async (x)=>{
       if(x.has_children){
         const respChild = await axios('https://api.notion.com/v1/blocks/'+x.id+'/children',paramsGet)
         x.child = await respChild.data.results
@@ -123,7 +140,8 @@ export async function getStaticProps(context){
       }
     })
   }
-  getChild(dataGet)
+  await getChild(dataGet)
+
 
   /*   Get para o menu  */
     const resp = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/',paramsGet)
