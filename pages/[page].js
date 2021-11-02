@@ -3,6 +3,9 @@ import axios from "axios"
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect } from "react"
+import { Icon } from "rbx"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBook,faBookmark } from "@fortawesome/free-solid-svg-icons"
 
 export default function Page({cont,title}){
   const router = useRouter();
@@ -12,8 +15,17 @@ export default function Page({cont,title}){
       switch(resp.type){
         case 'paragraph':
           valueContent = resp[resp.type].text[0]?.href ? 
-          <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}> 
+          <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}>
+            <div className='menuComponent'>
+              <div className='textContent'>
             {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
+              </div>
+            <Icon>
+              <FontAwesomeIcon
+                icon={title == 'Cursos'?faBook:faBookmark}
+              />
+            </Icon>
+            </div>
             
           </a> : 
           <div> {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
@@ -21,8 +33,10 @@ export default function Page({cont,title}){
           break;
         case "bulleted_list_item" :
           valueContent = <ul key={resp.id}>{resp[resp.type].text?.map(x=>{return <li key={resp.id+1} >{x?.plain_text}</li>})}</ul>
+          break;
         case "image" :
-          valueContent = <Image key={resp.id}  alt={'img '+resp.id} src={resp[resp.type].external.url}/>
+          valueContent = <Image key={resp.id}  alt={'img '+resp.id} src={resp[resp.type].external?.url}/>
+          break;
         default :
           valueContent = ''
       }
