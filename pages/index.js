@@ -1,12 +1,14 @@
 import axios from "axios"
   
-export default function Home({list,base}) {
-  console.log(list)
+export default function Home({list}) {
+    console.log(list)
     return (
         <>  
         </>
     )
 }
+
+
 
 export async function getStaticProps(){
     const paramsPost = {
@@ -23,19 +25,17 @@ export async function getStaticProps(){
         },
         method:'get'
     }
-    
-     
     const respPost = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/query',paramsPost)
     const dataPost = await respPost.data.results
 
     const respGet = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/',paramsGet)
     const dataGet = await respGet.data
 
+
     return {
         props:{
             list:dataPost,
             base:dataGet,
-        },
-      revalidate: 10,
+        }
     }
 }

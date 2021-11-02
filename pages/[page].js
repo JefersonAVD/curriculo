@@ -1,12 +1,27 @@
-import MyModal from "../../components/Modal"
+import MyModal from "../components/Modal"
 import axios from "axios"
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useEffect } from "react"
 
-export default function Page({title,cont}){
-  console.log(cont)
+export default function Page({cont,title}){
+
+  const router = useRouter();
+  
+
+  function populate(content){
+    
+  }
+  if (router.isFallback) {
+    return <MyModal title={'Loading...'}>Loading...</MyModal>
+  }
+  if (!cont){
+    return <MyModal title={'Erro 404'}>'Não há nada aqui...'</MyModal>
+  }
+
   return(
       <MyModal title={title}>
-        {
+        {router.isFallback?<MyModal title={'Loading...'}>Loading...</MyModal> :
           cont.map((resp,index)=>{
             switch(resp.type){
               case 'paragraph':
@@ -26,7 +41,7 @@ export default function Page({title,cont}){
                 break;
             }
           })
-      }
+        }
       </MyModal>  
   )
 }
@@ -43,22 +58,40 @@ export async function getStaticPaths(){
   const dataPost = await respPost.data.results
 
   const paths = dataPost.map(resp=>{
+    
     return {
       params:{
-        page:resp.id,
-        section:resp.properties.Name.title[0].text.content,
+        page:resp.properties.Name.title[0].text.content
       }
     }
   })
   return{
     paths,
-    fallback:'blocking'
+    fallback:true
   }
 }
 
 export async function getStaticProps(context){
 
-  const block_id = context.params.page;
+  const block_name = context.params.page
+
+  const paramsPost = {
+    headers:{
+        "Authorization": process.env.NOTION_KEY,
+        "Notion-Version": "2021-08-16"
+    },
+    method:'post'
+  }
+  const respPost = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/query',paramsPost)
+  const dataPost = await respPost.data.results
+
+  let id ;
+
+  dataPost.forEach(x=>{
+    if(x.properties.Name.title[0].text.content == block_name){
+      id = x.id;
+    }
+  })
 
   const paramsGet = {
       headers:{
@@ -68,8 +101,18 @@ export async function getStaticProps(context){
       method:'get'
   }
 
-  const respGet = await axios('https://api.notion.com/v1/blocks/'+block_id+'/children',paramsGet)
-  const dataGet = await respGet.data.results
+  let respGet = null
+  let dataGet = null
+  try{
+    respGet = await axios('https://api.notion.com/v1/blocks/'+id+'/children', paramsGet)
+    dataGet = await respGet.data.results
+  }
+  catch(err) {}; 
+  if (!dataGet) {
+    return {
+      notFound: true,
+    }
+  }
 
   function getChild(data){
     data.forEach(async (x,index)=>{
@@ -82,37 +125,21 @@ export async function getStaticProps(context){
   }
   getChild(dataGet)
 
-  /*if(dataGet.has_children){
-    const respChild = await axios('https://api.notion.com/v1/blocks/'+dataGet.id+'/children',paramsGet)
-    dataGet.last_edited_time = await respChild.data
-
-  }
-
-
-
-
   /*   Get para o menu  */
     const resp = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/',paramsGet)
     const data = await resp.data
 
-    const paramsPost = {
-      headers:{
-          "Authorization": process.env.NOTION_KEY,
-          "Notion-Version": "2021-08-16"
-      },
-      method:'post'
-    }
-    const respPost = await axios('https://api.notion.com/v1/databases/ee7c4808765e4e438e09979102edb518/query',paramsPost)
-    const dataPost = await respPost.data.results
+
   /*   Get para o menu  */
+
+  
   return {
-      props:{
-          cont:dataGet,
-          title:context.params.section,
-          base:data,
-          list:dataPost,
-          
-      },
-      revalidate: 2
+    props:{
+        cont:dataGet?dataGet:[],
+        base:data,
+        list:dataPost,
+        title:block_name,   
+    },
+    revalidate:1,
   }
 }
