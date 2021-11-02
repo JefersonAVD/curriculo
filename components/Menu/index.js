@@ -25,7 +25,7 @@ export default function Menu({list,base}) {
                 </Column>
                 {
                     list && list.map((resp,index)=>{return(
-                        <Link key={index} href={'/'+resp.properties.Name.title[0].text.content} /*href={'/'+resp.id}*/ >
+                        <Link key={index} passHref href={'/'+resp.properties.Name.title[0].text.content} /*href={'/'+resp.id}*/ >
                             <Column as='a' size='3'  className='menuItem' onClick={()=>{changetoggle(!toggle)}}>
                                 <p>{resp.properties.Name.title[0].text.content}</p>
                                 <Icon as='span'>

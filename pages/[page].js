@@ -16,7 +16,7 @@ export default function Page({cont,title}){
     return <MyModal title={'Loading...'}>Loading...</MyModal>
   }
   if (!cont){
-    return <MyModal title={'Erro 404'}>'Não há nada aqui...'</MyModal>
+    return <MyModal title={'Erro 404'}>Não há nada aqui...</MyModal>
   }
 
   return(
