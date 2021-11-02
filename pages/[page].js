@@ -135,7 +135,7 @@ export async function getStaticProps(context){
   
   return {
     props:{
-        cont:dataGet?dataGet:[],
+        cont:dataGet,
         base:data,
         list:dataPost,
         title:block_name,   
