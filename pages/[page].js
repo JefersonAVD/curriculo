@@ -8,9 +8,7 @@ export default function Page({cont,title}){
   const router = useRouter();
 
   function populate(resp){
-    let valueContent
-    if(resp.child){ 
-      console.log(resp) 
+    let valueContent 
       switch(resp.type){
         case 'paragraph':
           valueContent = resp[resp.type].text[0]?.href ? 
@@ -19,7 +17,7 @@ export default function Page({cont,title}){
             
           </a> : 
           <div> {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
-            <div className='child'>{resp.child.map(x=>{return <p key={resp.id+1} >{x[x.type].text[0].plain_text}</p>})}</div></div> 
+            <div className='child'>{resp.child?.map(x=>{return <p key={resp.id+1} >{x[x.type].text[0].plain_text}</p>})}</div></div> 
           break;
         case "bulleted_list_item" :
           valueContent = <ul key={resp.id}>{resp[resp.type].text?.map(x=>{return <li key={resp.id+1} >{x?.plain_text}</li>})}</ul>
@@ -28,30 +26,10 @@ export default function Page({cont,title}){
         default :
           valueContent = ''
       }
-    }else{
-      let valueContent;
-      switch(resp.type){
-        case 'paragraph':
-          valueContent = resp[resp.type].text[0]?.href ? 
-          <a key={resp.id} target='_blank'rel="noreferrer" href={resp[resp.type].text[0]?.href}> 
-            {resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})}
-            
-          </a> : 
-          resp[resp.type].text?.map(x=>{ return( <p key={resp.id+1}>{x?.plain_text}</p>)})
-          break;
-        case "bulleted_list_item" :
-          valueContent = <ul key={resp.id}>{resp[resp.type].text?.map(x=>{return <li key={resp.id} >{x?.plain_text}</li>})}</ul>
-        case "image" :
-          valueContent = <Image key={resp.id}  alt={'img '+resp.id} src={resp[resp.type].external?.url}/>
-        default :
-          valueContent = ''
-    }
-    
     return(
     <div key={resp.id} className='content'>
       {valueContent}
-    </div>)
-    }  
+    </div>) 
   }
 
 
