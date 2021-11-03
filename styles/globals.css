@@ -33,18 +33,6 @@ a {
   top:12%
 }
 
-@media (max-width: 411px) {
-  .menuItem{
-    height: 60px;
-  }
-  .menuItem .icon{
-    position:absolute;
-    right: 6%;
-    top:30%
-  }
-  
-}
-
 .modalRoot{
   position:'absolute'; 
   bottom: 0;
@@ -86,4 +74,29 @@ a {
 .menuComponent .icon{
   font-size: 30px;
 
+}
+.Background{
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: -100;
+  opacity: 0.5;
+  width: 75%;
+}
+
+@media (max-width: 411px) {
+  .menuItem{
+    height: 60px;
+  }
+  .menuItem .icon{
+    position:absolute;
+    right: 6%;
+    top:30%
+  }
+  .Background{
+  
+    width: 100%;
+  }
+  
 }

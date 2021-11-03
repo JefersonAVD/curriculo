@@ -2,9 +2,11 @@ import {Column, Container , Icon, Image} from "rbx"
 import { useContext } from "react"
 import { modalToogle } from "../../pages/_app"
 import Link from 'next/link'
+import * as animation from '../Animation/web_dev.json'
 
 import { faWindowRestore } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Lottie from "react-lottie"
 
 
 export default function Menu({list,base}) {
@@ -36,6 +38,21 @@ export default function Menu({list,base}) {
                     )})
                 }
             </Column.Group>
+            <div className='Background'>
+                <Lottie
+                    options={{
+                        loop:true,
+                        autoplay:true,
+                        animationData:animation,
+                        rendererSettings: {
+                            preserveAspectRatio: 'xMidYMid slice'
+                        }
+                    }}
+                    width={'100%'}
+                    height={'75vh'}
+                />
+            </div>
+            
         </Container>
     )
 }
