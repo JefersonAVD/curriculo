@@ -19,8 +19,9 @@ a {
   border: 1px solid #ccc;
   border-radius: 10px;
   margin: 10px 5%;
-  height: 17.5vh;
+  height: 10vh;
   position: relative;
+  transition: .8s ease-in-out;
 }
 
 .menuItem p{
@@ -30,7 +31,8 @@ a {
 .menuItem .icon{
   position:absolute;
   right: 6%;
-  top:12%
+  top:12%;
+  transition:  .8s ease-in-out;
 }
 
 .modalRoot{
@@ -95,8 +97,52 @@ a {
     top:30%
   }
   .Background{
-  
     width: 100%;
   }
   
+}
+.menuAvatar , .menuComponent , .menuItem{
+  background-color: #ffffff80;
+}
+.menuAvatar{
+  width:320px;
+  margin:10px auto;
+  border-radius: 10px;
+  padding: 5px;
+}
+.menuAvatar h1{
+  font-size: 20px;
+  text-transform: uppercase;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  
+}
+
+.menuAvatar:hover > h1{
+  animation: 3s colorizer  ease-in-out  infinite ;
+}
+
+.menuAvatar span{
+  text-transform: capitalize;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.menuItem:hover{
+  height: 17.5vh;;
+}
+.menuItem:hover> .icon{
+  transform: rotate(720deg);
+
+}
+
+
+@keyframes colorizer {
+  0%{
+    color:darkblue
+  }
+  50%{
+    color: cyan;
+  }
+  100%{
+    color:darkblue
+  }
+
 }

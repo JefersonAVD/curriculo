@@ -14,15 +14,15 @@ export default function Menu({list,base}) {
     return (
         <Container>
             <Column.Group multiline centered>
-                <Column size='full' textAlign='centered'>
+                <Column size='full' textAlign='centered' >
                     <div className='level-item'>
                         <Image.Container className='level fit'>
                             <Image alt={'minha imagem de perfil'} rounded={true} src={base && base.cover.file.url}/>   
                         </Image.Container>
                     </div>
-                    <div>
+                    <div className='menuAvatar' >
                         <h1>Jeferson Ataide Vasques Dias</h1>
-                        <label>Programador Front-end</label>
+                        <span>Programador Front-end</span>
                     </div> 
                 </Column>
                 {
